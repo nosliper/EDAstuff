@@ -4,8 +4,8 @@ import java.util.List;
 
 /**
  * Implementa a lista de prioridade usando vetor ordenado.
- * Reparem que aqui você devem utilizar obrigatóriamente o quickSort 
- * para realizar a ordenação, quando for necessário.
+ * Reparem que aqui vocï¿½ devem utilizar obrigatï¿½riamente o quickSort 
+ * para realizar a ordenaï¿½ï¿½o, quando for necessï¿½rio.
  * @author fabio
  *
  */
@@ -20,10 +20,15 @@ public class LPMaximaOrdenada {
 	}
 	
 	public void contruir(List<Integer> entrada){
+		for(int i = 0; i < entrada.size(); i++){
+			this.vetor[i] = entrada.get(i);
+		}
+		n = entrada.size();
+		this.quickSort(0, n-1);
 	}
 	
 	public int getMaximaPrioridade(){
-		return 0;
+		return this.vetor[n-1];
 	}
 	
 	public int remove(){
@@ -31,13 +36,40 @@ public class LPMaximaOrdenada {
 	}	
 	
 	public void inserir(int prioridade){
+		if(n + 1 < this.nMaximo){
+			this.vetor[n] = prioridade;
+			n = n + 1;
+		}
+		this.quickSort(0, n-1);
 	}
-	
+
 	public void alterarPrioridade(int prioridade, int novaPrioridade){
+		
 	}
 	
 	private void quickSort(int ini, int fim){
-
+		int esq = ini;
+		int dir = fim;
+		int pivot = this.vetor[(ini + fim)/2];
+		while(esq <= dir){
+			while(this.vetor[esq] < pivot && esq < fim)
+				esq = esq + 1;
+			while(this.vetor[dir] > pivot && dir > ini)
+				dir = dir - 1;
+			if(esq <= dir){
+				int aux = this.vetor[esq];
+				this.vetor[esq] = this.vetor[dir];
+				this.vetor[dir] = aux;
+				esq = esq + 1;
+				dir = dir - 1;
+			}
+		}
+		if(ini < dir){
+			this.quickSort(ini, dir);
+		}
+		if(esq < fim){
+			this.quickSort(esq, fim);
+		}
 	}
 	
 	private int particiona(int p, int r){		
