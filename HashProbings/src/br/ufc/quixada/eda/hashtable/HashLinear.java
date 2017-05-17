@@ -2,34 +2,27 @@ package br.ufc.quixada.eda.hashtable;
 
 import java.util.ArrayList;
 
-public class HashInterna<T> extends Hash<T>{
-	private ArrayList<Node<T>> table = null;
-	private int size = 0;
+public class HashLinear<T> extends Hash<T> {
 	private int emptyKey = -1;
-	public HashInterna(int maxSize) {
+	protected ArrayList<Node<T>> table = null;
+	public HashLinear(int maxSize) {
 		this.maxSize = maxSize;
 		this.table = new ArrayList<Node<T>>();
 		for (int i = 0; i < this.maxSize; i++) {
 			table.add(empty());
 		}
 	}
-	private Node<T> empty() {
-		return new Node<T>(null, emptyKey);
-	}
+	@Override
 	protected int hash(int key) {
 		int index = key % maxSize;
-		while(table.get(index).getKey() != emptyKey) { //TODO: fix error with keys bigger than the maxSize
-			index = (index + 1) % maxSize;
+		int currKey = table.get(index).getKey();
+		while (currKey != -1 && currKey != key) {
+			index = (key + 1) % maxSize;
 		}
 		return index;
 	}
-	public boolean existsKey(int key) {
-		return table.get(hash(key)).getKey() != emptyKey;
-	}
-	public T get(int key) {
-		return table.get(hash(key)).getValue();
-	}
-	public boolean insert(T value, int key) throws FullTableException {
+	@Override
+	public boolean insert(T value, int key) {
 		try{
 			int index = hash(key);
 			if (getSize() == maxSize) {
@@ -47,7 +40,9 @@ public class HashInterna<T> extends Hash<T>{
 		}
 		return false;
 	}
-	public boolean remove(int key) {
+
+	@Override
+	public boolean remove(int key) { //TODO
 		int index = hash(key);
 		if (table.get(index).getKey() != emptyKey) { 
 			table.set(index, empty());
@@ -56,4 +51,10 @@ public class HashInterna<T> extends Hash<T>{
 		}
 		return false;
 	}
+
+	@Override
+	public T get(int key) {
+		return table.get(hash(key)).getValue();
+	}
+
 }
