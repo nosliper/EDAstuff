@@ -62,6 +62,6 @@ public class Node<T extends Comparable<T>> {
 			return false;
 		}
 		Node<T> node = (Node<T>) other; //TODO: check if this xit works properly
-		return Objects.equals(value, node);
+		return Objects.equals(value, node.getValue());
 	}
 }
